@@ -15,6 +15,7 @@
                 <attribute name="Internal-Channel" value="${Internal-Channel}"/>
             </manifest>
             <fileset dir="../bin" excludes="/gui/ressources/icons/**"/>
+            <fileset dir="../src" excludes="**/*.java"/>
         </jar>
     </target>
 
