@@ -1,0 +1,4 @@
+Build
+	set -e
+	ant -buildfile ant/deploy-release.xml
+	ant -buildfile ant/setup-linux.xml binaries
