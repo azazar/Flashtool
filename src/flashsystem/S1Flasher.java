@@ -1,12 +1,10 @@
 package flashsystem;
 
 import flashsystem.io.USBFlash;
-import gui.MainSWT;
 import gui.tools.WidgetTask;
 import gui.tools.XMLBootConfig;
 import gui.tools.XMLBootDelivery;
 
-import java.awt.Dialog;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
