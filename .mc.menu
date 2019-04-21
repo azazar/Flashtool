@@ -1,9 +1,18 @@
 Build
 	set -e
-	ant -buildfile ant/deploy-release.xml
+	ant -buildfile ant/deploy.xml
 	ant -buildfile ant/setup-linux.xml binaries
 
 Clean Build
 	set -e
-	ant -buildfile ant/deploy-release.xml clean all
-	ant -buildfile ant/setup-linux.xml binaries clean all
+	rm -rf ../Deploy/Flashtool bin
+	rmdir --ignore-fail-on-non-empty ../Deploy
+	ant -buildfile ant/deploy.xml all
+	ant -buildfile ant/setup-linux.xml binaries
+
+Clean
+	set -e
+	ant -buildfile ant/deploy.xml clean
+	ant -buildfile ant/setup-linux.xml clean
+	rm -rf ../Deploy/Flashtool bin
+	rmdir --ignore-fail-on-non-empty ../Deploy

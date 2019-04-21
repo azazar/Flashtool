@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project default="all" name="Deploy Flashtool">
 
-    <property name="version" value="0.9.25.0"/>
-    <property name="progtime" value="17-06-2018 16:00:00"/>
-    
-    <property name="deployPath" value="../../Deploy/FlashTool"/>
-
+    <property file="build.properties"/>
+	
     <target name="all" depends="core release"/>
 	
     <target name="clean">
@@ -15,6 +12,23 @@
     <target name="clone">
         <git-clone uri="https://github.com/Androxyde/devices.git" dest="${deployPath}/devices" />
     </target>	
+    
+    <path id="x10flasher-libs">
+        <fileset dir="../libs">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="../libs/swtlin/x86_64">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+    <target name="compile">
+        <mkdir dir="../bin" />
+        <javac destdir="../bin" includeantruntime="false" >
+            <src path="../src"/>
+            <classpath refid="x10flasher-libs" />
+        </javac>
+    </target>
 
     <target name="ressources">
         <jar destfile="${deployPath}/x10flasher_lib/x10flasher-res.jar">
@@ -29,7 +43,7 @@
         </jar>
     </target>
 
-    <target name="core release" depends="clean,ressources">
+    <target name="core release" depends="clean,compile,ressources">
         <mkdir dir ="${deployPath}"/>
         <mkdir dir ="${deployPath}/custom/"/>
         <mkdir dir ="${deployPath}/custom/root"/>
