@@ -2,3 +2,8 @@ Build
 	set -e
 	ant -buildfile ant/deploy-release.xml
 	ant -buildfile ant/setup-linux.xml binaries
+
+Clean Build
+	set -e
+	ant -buildfile ant/deploy-release.xml clean all
+	ant -buildfile ant/setup-linux.xml binaries clean all
