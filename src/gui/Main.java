@@ -20,7 +20,7 @@ public class Main {
             ConfigurationSource cs = new ConfigurationSource(Main.class.getClassLoader().getResourceAsStream("org/logger/config/log4j2.xml"));
             Configurator.initialize(null, cs);
         }
-        catch (IOException e1) {
+        catch (IOException | RuntimeException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
