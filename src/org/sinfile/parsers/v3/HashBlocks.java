@@ -2,7 +2,8 @@ package org.sinfile.parsers.v3;
 
 import com.igormaznitsa.jbbp.mapper.Bin;
 
-@Bin  
+@Bin
 public class HashBlocks {
-    public HashBlock [] blocks;
+
+    public HashBlock[] blocks;
 }

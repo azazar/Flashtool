@@ -14,44 +14,45 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.logger.LogProgress;
 
 class APKFilter implements FilenameFilter {
+
     public boolean accept(File dir, String name) {
         return (name.toUpperCase().endsWith(".APK"));
     }
 }
 
-
 public class APKInstallJob extends Job {
 
-	String instpath;
-	static final Logger logger = LogManager.getLogger(APKInstallJob.class);
+    String instpath;
+    static final Logger logger = LogManager.getLogger(APKInstallJob.class);
 
-	public APKInstallJob(String name) {
-		super(name);
-	}
-	
-	public void setFolder(String path) {
-		instpath = path;
-	}
-	
+    public APKInstallJob(String name) {
+        super(name);
+    }
+
+    public void setFolder(String path) {
+        instpath = path;
+    }
+
     protected IStatus run(IProgressMonitor monitor) {
-    	try {
-			File files = new File(instpath);
-			File[] chld = files.listFiles(new APKFilter());
-			LogProgress.initProgress(chld.length);
-			for(int i = 0; i < chld.length; i++){
-				if (chld[i].getName().toUpperCase().endsWith(".APK"))
-					AdbUtility.install(chld[i].getPath());
-				LogProgress.updateProgress();
-			}
-			LogProgress.initProgress(0);
-			logger.info("APK Installation finished");
-			return Status.OK_STATUS;
-    	}
-    	catch (Exception e) {
-    		e.printStackTrace();
-    		logger.error(e.getMessage());
-    		LogProgress.initProgress(0);
-    		return Status.CANCEL_STATUS;
-    	}
+        try {
+            File files = new File(instpath);
+            File[] chld = files.listFiles(new APKFilter());
+            LogProgress.initProgress(chld.length);
+            for (int i = 0; i < chld.length; i++) {
+                if (chld[i].getName().toUpperCase().endsWith(".APK")) {
+                    AdbUtility.install(chld[i].getPath());
+                }
+                LogProgress.updateProgress();
+            }
+            LogProgress.initProgress(0);
+            logger.info("APK Installation finished");
+            return Status.OK_STATUS;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+            LogProgress.initProgress(0);
+            return Status.CANCEL_STATUS;
+        }
     }
 }

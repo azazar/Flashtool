@@ -19,79 +19,79 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.system.OS;
 
 @Plugin(
-	    name = "StringBuilderAppender",
-	    category = "Core",
-	    elementType = "appender",
-	    printObject = true)
+        name = "StringBuilderAppender",
+        category = "Core",
+        elementType = "appender",
+        printObject = true)
 public final class StringBuilderAppender extends AbstractAppender {
 
-	private static StringBuilder content = new StringBuilder();
+    private static StringBuilder content = new StringBuilder();
 
-	private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
-	private final Lock readLock = rwLock.readLock();
+    private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
+    private final Lock readLock = rwLock.readLock();
 
-	public static void writeFile(String timestamp) {
-		String logname=OS.getFolderUserFlashtool()+File.separator+"flashtool_"+timestamp+".log";
-		FileWriter writer = null;
-		try {
-			writer = new FileWriter(new File(logname));
-			writer.write(content.toString());
-		}
-		catch (IOException exception) {}
-		finally {
-			if (writer != null) {
-				try {
-					writer.close();
-				}
-				catch (Exception exception) {}
-			}
-		}
-	}
+    public static void writeFile(String timestamp) {
+        String logname = OS.getFolderUserFlashtool() + File.separator + "flashtool_" + timestamp + ".log";
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(new File(logname));
+            writer.write(content.toString());
+        }
+        catch (IOException exception) {
+        }
+        finally {
+            if (writer != null) {
+                try {
+                    writer.close();
+                }
+                catch (Exception exception) {
+                }
+            }
+        }
+    }
 
-	  protected StringBuilderAppender(String name, Filter filter,
-	                             Layout<? extends Serializable> layout,
-	                             final boolean ignoreExceptions) {
-	    super(name, filter, layout, ignoreExceptions);
-	  }
+    protected StringBuilderAppender(String name, Filter filter,
+            Layout<? extends Serializable> layout,
+            final boolean ignoreExceptions) {
+        super(name, filter, layout, ignoreExceptions);
+    }
 
-	  /**
-	   * This method is where the appender does the work.
-	   *
-	   * @param event Log event with log data
-	   */
-	  @Override
-		public void append(LogEvent event) {
-			readLock.lock();
-			String message = new String(getLayout().toByteArray(event));
-			content.append(message);
-			MyLogger.lastaction="log";
-			readLock.unlock();
-		}
+    /**
+     * This method is where the appender does the work.
+     *
+     * @param event Log event with log data
+     */
+    @Override
+    public void append(LogEvent event) {
+        readLock.lock();
+        String message = new String(getLayout().toByteArray(event));
+        content.append(message);
+        MyLogger.lastaction = "log";
+        readLock.unlock();
+    }
 
-	  /**
-	   * Factory method. Log4j will parse the configuration and call this factory 
-	   * method to construct the appender with
-	   * the configured attributes.
-	   *
-	   * @param name   Name of appender
-	   * @param layout Log layout of appender
-	   * @param filter Filter for appender
-	   * @return The TextAreaAppender
-	   */
-	  @PluginFactory
-	  public static StringBuilderAppender createAppender(
-	      @PluginAttribute("name") String name,
-	      @PluginElement("Layout") Layout<? extends Serializable> layout,
-	      @PluginElement("Filter") final Filter filter) {
-	    if (name == null) {
-	      LOGGER.error("No name provided for TextAreaAppender2");
-	      return null;
-	    }
-	    if (layout == null) {
-	      layout = PatternLayout.createDefaultLayout();
-	    }
-	    return new StringBuilderAppender(name, filter, layout, true);
-	  }
+    /**
+     * Factory method. Log4j will parse the configuration and call this factory
+     * method to construct the appender with the configured attributes.
+     *
+     * @param name Name of appender
+     * @param layout Log layout of appender
+     * @param filter Filter for appender
+     * @return The TextAreaAppender
+     */
+    @PluginFactory
+    public static StringBuilderAppender createAppender(
+            @PluginAttribute("name") String name,
+            @PluginElement("Layout") Layout<? extends Serializable> layout,
+            @PluginElement("Filter") final Filter filter) {
+        if (name == null) {
+            LOGGER.error("No name provided for TextAreaAppender2");
+            return null;
+        }
+        if (layout == null) {
+            layout = PatternLayout.createDefaultLayout();
+        }
+        return new StringBuilderAppender(name, filter, layout, true);
+    }
 
-
-	}
+}

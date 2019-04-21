@@ -13,41 +13,43 @@ public class MyTreeContentProvider implements ITreeContentProvider {
     //Here we provide a list of objects
     @Override
     public Object[] getElements(Object inputElement) {
-      if (inputElement instanceof TreeDevices)
-        return ((TreeDevices) inputElement).getContent().toArray();
-      else
-        return EMPTY_ARRAY;
+        if (inputElement instanceof TreeDevices) {
+            return ((TreeDevices) inputElement).getContent().toArray();
+        }
+        else {
+            return EMPTY_ARRAY;
+        }
     }
 
     //Queried to know if the current node has children
     @Override
     public boolean hasChildren(Object element) {
-      if (element instanceof TreeDevices || element instanceof TreeDevice || element instanceof TreeDeviceVariant || element instanceof TreeDeviceCustomization) {
-        return true;
-      }
-      return false;
+        if (element instanceof TreeDevices || element instanceof TreeDevice || element instanceof TreeDeviceVariant || element instanceof TreeDeviceCustomization) {
+            return true;
+        }
+        return false;
     }
 
     //Queried to load the children of a given node
     @Override
     public Object[] getChildren(Object parentElement) {
         if (parentElement instanceof TreeDevices) {
-      	  TreeDevices devices = (TreeDevices) parentElement;
-      	  return devices.getContent().toArray();
+            TreeDevices devices = (TreeDevices) parentElement;
+            return devices.getContent().toArray();
         }
-    	if (parentElement instanceof TreeDevice) {
-    	  TreeDevice device = (TreeDevice) parentElement;
-    	  return device.getVariants().toArray();
-    	}
-    	if (parentElement instanceof TreeDeviceVariant) {
-      	  TreeDeviceVariant variant = (TreeDeviceVariant) parentElement;
-      	  return variant.getCustomizations().toArray();
-      	}
-    	if (parentElement instanceof TreeDeviceCustomization) {
-        	  TreeDeviceCustomization cust = (TreeDeviceCustomization) parentElement;
-        	  return cust.getReleases().toArray();
+        if (parentElement instanceof TreeDevice) {
+            TreeDevice device = (TreeDevice) parentElement;
+            return device.getVariants().toArray();
         }
-    	return EMPTY_ARRAY;
+        if (parentElement instanceof TreeDeviceVariant) {
+            TreeDeviceVariant variant = (TreeDeviceVariant) parentElement;
+            return variant.getCustomizations().toArray();
+        }
+        if (parentElement instanceof TreeDeviceCustomization) {
+            TreeDeviceCustomization cust = (TreeDeviceCustomization) parentElement;
+            return cust.getReleases().toArray();
+        }
+        return EMPTY_ARRAY;
     }
 
     @Override
@@ -60,7 +62,7 @@ public class MyTreeContentProvider implements ITreeContentProvider {
 
     @Override
     public Object getParent(Object element) {
-      return null;
+        return null;
     }
 
-  }
+}

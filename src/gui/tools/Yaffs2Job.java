@@ -11,31 +11,30 @@ import org.system.OS;
 
 public class Yaffs2Job extends Job {
 
-	String _fname = "";
-	static final Logger logger = LogManager.getLogger(Yaffs2Job.class);
-	
-	public void setFilename(String fname) {
-		_fname = fname;
-	}
-	
-	public Yaffs2Job(String name) {
-		super(name);
-	}
-	
-    protected IStatus run(IProgressMonitor monitor) {
-    	try {
-				int index = _fname.lastIndexOf(".yaffs2");
-				String folder = _fname.substring(0, index)+"_content";
-				logger.info("Extracting " + _fname + " to " + folder);
-				OS.unyaffs(_fname, folder);
-				logger.info("Extraction finished");
-				return Status.OK_STATUS;
-    	}
-    	catch (Exception e) {
-    		e.printStackTrace();
-    		return Status.CANCEL_STATUS;
-    	}
+    String _fname = "";
+    static final Logger logger = LogManager.getLogger(Yaffs2Job.class);
+
+    public void setFilename(String fname) {
+        _fname = fname;
     }
 
+    public Yaffs2Job(String name) {
+        super(name);
+    }
+
+    protected IStatus run(IProgressMonitor monitor) {
+        try {
+            int index = _fname.lastIndexOf(".yaffs2");
+            String folder = _fname.substring(0, index) + "_content";
+            logger.info("Extracting " + _fname + " to " + folder);
+            OS.unyaffs(_fname, folder);
+            logger.info("Extraction finished");
+            return Status.OK_STATUS;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return Status.CANCEL_STATUS;
+        }
+    }
 
 }

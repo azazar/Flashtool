@@ -3,20 +3,17 @@ package gui.tools;
 import java.io.File;
 import java.io.FileFilter;
 
-public class FirmwareFileFilter implements FileFilter
-{
-	private final String[] okFileExtensions = 
-		new String[] {"sin", "ta", "fsc"};
+public class FirmwareFileFilter implements FileFilter {
 
-  public boolean accept(File file)
-  {
-    for (String extension : okFileExtensions)
-    {
-      if (file.getName().toLowerCase().endsWith(extension) && file.isFile())
-      {
-        return true;
-      }
+    private final String[] okFileExtensions
+            = new String[]{"sin", "ta", "fsc"};
+
+    public boolean accept(File file) {
+        for (String extension : okFileExtensions) {
+            if (file.getName().toLowerCase().endsWith(extension) && file.isFile()) {
+                return true;
+            }
+        }
+        return false;
     }
-    return false;
-  }
 }

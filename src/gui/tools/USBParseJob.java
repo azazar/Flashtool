@@ -17,35 +17,35 @@ import flashsystem.Bundle;
 
 public class USBParseJob extends Job {
 
-	String logfile="";
-	String sindir="";
-	static final Logger logger = LogManager.getLogger(USBParseJob.class);
-	Session session;
-	
-	public USBParseJob(String name) {
-		super(name);
-	}
-	
-	public void setFilename(String file) {
-		logfile=file;
-	}
+    String logfile = "";
+    String sindir = "";
+    static final Logger logger = LogManager.getLogger(USBParseJob.class);
+    Session session;
 
-	public void setSinDir(String dir) {
-		sindir=dir;
-	}
+    public USBParseJob(String name) {
+        super(name);
+    }
+
+    public void setFilename(String file) {
+        logfile = file;
+    }
+
+    public void setSinDir(String dir) {
+        sindir = dir;
+    }
 
     protected IStatus run(IProgressMonitor monitor) {
-    	try {
-    		session = Parser.parse(logfile, sindir);
-			return Status.OK_STATUS;
-    	}
-    	catch (Exception e) {
-    		e.printStackTrace();
-    		return Status.CANCEL_STATUS;
-    	}
+        try {
+            session = Parser.parse(logfile, sindir);
+            return Status.OK_STATUS;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return Status.CANCEL_STATUS;
+        }
     }
-    
+
     public Session getSession() {
-    	return session;
+        return session;
     }
 }

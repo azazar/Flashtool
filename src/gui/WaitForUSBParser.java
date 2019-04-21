@@ -20,96 +20,98 @@ import org.simpleusblogger.Session;
 
 public class WaitForUSBParser extends Dialog {
 
-	protected Shell shlWaiForDevicesSync;
-	protected boolean canClose = false;
-	protected Dialog mydial;
-	protected Session sess;
+    protected Shell shlWaiForDevicesSync;
+    protected boolean canClose = false;
+    protected Dialog mydial;
+    protected Session sess;
 
-	/**
-	 * Create the dialog.
-	 * @param parent
-	 * @param style
-	 */
-	public WaitForUSBParser(Shell parent, int style) {
-		super(parent, style);
-		setText("Parsing USB log");
-		mydial = this;
-	}
+    /**
+     * Create the dialog.
+     *
+     * @param parent
+     * @param style
+     */
+    public WaitForUSBParser(Shell parent, int style) {
+        super(parent, style);
+        setText("Parsing USB log");
+        mydial = this;
+    }
 
-	/**
-	 * Open the dialog.
-	 * @return the result
-	 */
-	public Object open(String file, String folder) {
-		createContents(file,folder);
-		
-		Label lblNewLabel = new Label(shlWaiForDevicesSync, SWT.NONE);
-		lblNewLabel.setBounds(10, 32, 323, 15);
-		lblNewLabel.setText("Please wait until the end of process");
-		shlWaiForDevicesSync.open();
-		shlWaiForDevicesSync.layout();
-		Display display = getParent().getDisplay();
-		while (!shlWaiForDevicesSync.isDisposed()) {
-			if (!display.readAndDispatch()) {
-				display.sleep();
-			}
-		}
-		return sess;
-	}
+    /**
+     * Open the dialog.
+     *
+     * @return the result
+     */
+    public Object open(String file, String folder) {
+        createContents(file, folder);
 
-	/**
-	 * Create contents of the dialog.
-	 */
-	private void createContents(String file,String folder) {
-		shlWaiForDevicesSync = new Shell(getParent(), getStyle());
-		shlWaiForDevicesSync.addListener(SWT.Close, new Listener() {
-		      public void handleEvent(Event event) {
-		    	  if (canClose) {
-		    		  sess = null;
-		    	  	event.doit = true;
-		    	  }
-		    	  else {
-		    		  WidgetTask.openOKBox(shlWaiForDevicesSync, "Wait for end of process");
-		    		  event.doit = false;
-		    	  }
-		      }
-		    });
-		shlWaiForDevicesSync.setSize(365, 128);
-		shlWaiForDevicesSync.setText("Parsing USB log");
-		USBParseJob pj = new USBParseJob("USB log parser");
-		pj.setFilename(file);
-		pj.setSinDir(folder);
+        Label lblNewLabel = new Label(shlWaiForDevicesSync, SWT.NONE);
+        lblNewLabel.setBounds(10, 32, 323, 15);
+        lblNewLabel.setText("Please wait until the end of process");
+        shlWaiForDevicesSync.open();
+        shlWaiForDevicesSync.layout();
+        Display display = getParent().getDisplay();
+        while (!shlWaiForDevicesSync.isDisposed()) {
+            if (!display.readAndDispatch()) {
+                display.sleep();
+            }
+        }
+        return sess;
+    }
 
-		pj.addJobChangeListener(new IJobChangeListener() {
-			public void aboutToRun(IJobChangeEvent event) {
-			}
+    /**
+     * Create contents of the dialog.
+     */
+    private void createContents(String file, String folder) {
+        shlWaiForDevicesSync = new Shell(getParent(), getStyle());
+        shlWaiForDevicesSync.addListener(SWT.Close, new Listener() {
+            public void handleEvent(Event event) {
+                if (canClose) {
+                    sess = null;
+                    event.doit = true;
+                }
+                else {
+                    WidgetTask.openOKBox(shlWaiForDevicesSync, "Wait for end of process");
+                    event.doit = false;
+                }
+            }
+        });
+        shlWaiForDevicesSync.setSize(365, 128);
+        shlWaiForDevicesSync.setText("Parsing USB log");
+        USBParseJob pj = new USBParseJob("USB log parser");
+        pj.setFilename(file);
+        pj.setSinDir(folder);
 
-			public void awake(IJobChangeEvent event) {
-			}
+        pj.addJobChangeListener(new IJobChangeListener() {
+            public void aboutToRun(IJobChangeEvent event) {
+            }
 
-			public void done(IJobChangeEvent event) {
-				sess = pj.getSession();
-				canClose=true;
-				Display.getDefault().asyncExec(
-						new Runnable() {
-							public void run() {
-								shlWaiForDevicesSync.dispose();
-							}
-						}
-				);				
-				
-			}
+            public void awake(IJobChangeEvent event) {
+            }
 
-			public void running(IJobChangeEvent event) {
-			}
+            public void done(IJobChangeEvent event) {
+                sess = pj.getSession();
+                canClose = true;
+                Display.getDefault().asyncExec(
+                        new Runnable() {
+                    public void run() {
+                        shlWaiForDevicesSync.dispose();
+                    }
+                }
+                );
 
-			public void scheduled(IJobChangeEvent event) {
-			}
+            }
 
-			public void sleeping(IJobChangeEvent event) {
-			}
-		});
-		pj.schedule();
+            public void running(IJobChangeEvent event) {
+            }
 
-	}
+            public void scheduled(IJobChangeEvent event) {
+            }
+
+            public void sleeping(IJobChangeEvent event) {
+            }
+        });
+        pj.schedule();
+
+    }
 }

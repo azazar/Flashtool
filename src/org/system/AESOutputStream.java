@@ -20,32 +20,32 @@ import com.google.common.io.BaseEncoding;
 
 public class AESOutputStream extends OutputStream {
 
-	private CipherOutputStream localCipherOutputStream;
-	
-	public AESOutputStream(OutputStream out) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, UnsupportedEncodingException, NoSuchProviderException, InvalidAlgorithmParameterException {
+    private CipherOutputStream localCipherOutputStream;
+
+    public AESOutputStream(OutputStream out) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, UnsupportedEncodingException, NoSuchProviderException, InvalidAlgorithmParameterException {
         if (Security.getProvider("BC") == null) {
             Security.addProvider(new BouncyCastleProvider());
         }
         SecretKeySpec secretKeySpec = new SecretKeySpec(Hashing.sha256().hashBytes(OS.AESKey.getBytes("UTF-8")).asBytes(), "AES");
-    	IvParameterSpec ivParameterSpec = new IvParameterSpec(BaseEncoding.base16().decode(OS.AESIV));
-    	Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding", "BC");
-    	cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
-    	localCipherOutputStream = new CipherOutputStream(out, cipher);
-	}
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(BaseEncoding.base16().decode(OS.AESIV));
+        Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding", "BC");
+        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
+        localCipherOutputStream = new CipherOutputStream(out, cipher);
+    }
 
-	@Override
-	public void write(int b) throws IOException {
-		localCipherOutputStream.write(b);
-	}
+    @Override
+    public void write(int b) throws IOException {
+        localCipherOutputStream.write(b);
+    }
 
-	@Override
-	public void flush() throws IOException {
-		localCipherOutputStream.flush();
-	}
+    @Override
+    public void flush() throws IOException {
+        localCipherOutputStream.flush();
+    }
 
-	@Override
-	public void close() throws IOException {
-		localCipherOutputStream.close();
-	}
- 
+    @Override
+    public void close() throws IOException {
+        localCipherOutputStream.close();
+    }
+
 }

@@ -3,38 +3,37 @@ package gui.models;
 /**
  * This class represents a player
  */
-
 public class Content {
-  
-  private Firmware firmware;
 
-  private String entry;
+    private Firmware firmware;
 
-  /**
-   * Constructs an empty Player
-   */
-  public Content() {
-    this(null);
-  }
+    private String entry;
 
-  public Content(String entry) {
-    setEntry(entry);
-  }
+    /**
+     * Constructs an empty Player
+     */
+    public Content() {
+        this(null);
+    }
 
-  public void setFirmware(Firmware team) {
-    this.firmware = firmware;
-  }
+    public Content(String entry) {
+        setEntry(entry);
+    }
 
-  public Firmware getFirmware() {
-	    return firmware;
-	  }
+    public void setFirmware(Firmware team) {
+        this.firmware = firmware;
+    }
 
-  public void setEntry(String entry) {
-	    this.entry = entry;
-  }
+    public Firmware getFirmware() {
+        return firmware;
+    }
 
-  public String getEntry() {
-    return entry;
-  }
+    public void setEntry(String entry) {
+        this.entry = entry;
+    }
+
+    public String getEntry() {
+        return entry;
+    }
 
 }

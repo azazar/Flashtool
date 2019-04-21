@@ -16,48 +16,48 @@ import gui.MainSWT;
 
 public class SearchJob extends Job {
 
-	boolean canceled = false;
-	boolean obsolete = false;
-	
-	static final Logger logger = LogManager.getLogger(SearchJob.class);
+    boolean canceled = false;
+    boolean obsolete = false;
 
-	public SearchJob(String name) {
-		super(name);
-	}
-	
-	public void stopSearch() {
-		canceled=true;
-	}
+    static final Logger logger = LogManager.getLogger(SearchJob.class);
+
+    public SearchJob(String name) {
+        super(name);
+    }
+
+    public void stopSearch() {
+        canceled = true;
+    }
 
     protected IStatus run(IProgressMonitor monitor) {
-		    while (!canceled) {
-				if (flashmode()) {
-					return Status.OK_STATUS;
-				}
-		    }
-		    return Status.CANCEL_STATUS;
+        while (!canceled) {
+            if (flashmode()) {
+                return Status.OK_STATUS;
+            }
+        }
+        return Status.CANCEL_STATUS;
     }
 
     public boolean flashmode() {
-    	boolean found = false;
-    	try {
-			Thread.sleep(500);
-			DeviceIdent id = Devices.getConnectedDevice();
-			found = id.getStatus().equals("flash");
-	    	if (found && OS.getName().equals("windows")) {
-	    		logger.info("Using Gordon gate drivers version "+id.getDriverMajor()+"."+id.getDriverMinor()+"."+id.getDriverMili()+"."+id.getDriverMicro());
-	    	}
-			if (id.getStatus().equals("flash_obsolete")) {
-				if (!obsolete) {
-					logger.error("Device connected in flash mode but driver is too old");
-					obsolete=true;
-				}
-			}
-		}
-		catch (Exception e) {
-	    	found = false;
-		}
-    	return found;
+        boolean found = false;
+        try {
+            Thread.sleep(500);
+            DeviceIdent id = Devices.getConnectedDevice();
+            found = id.getStatus().equals("flash");
+            if (found && OS.getName().equals("windows")) {
+                logger.info("Using Gordon gate drivers version " + id.getDriverMajor() + "." + id.getDriverMinor() + "." + id.getDriverMili() + "." + id.getDriverMicro());
+            }
+            if (id.getStatus().equals("flash_obsolete")) {
+                if (!obsolete) {
+                    logger.error("Device connected in flash mode but driver is too old");
+                    obsolete = true;
+                }
+            }
+        }
+        catch (Exception e) {
+            found = false;
+        }
+        return found;
     }
 
 }

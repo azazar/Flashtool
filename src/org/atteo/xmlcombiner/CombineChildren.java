@@ -19,87 +19,82 @@ package org.atteo.xmlcombiner;
  * Controls the behavior of merging child elements.
  */
 public enum CombineChildren {
-	/**
-	 * Merge subelements from both elements.
-	 *
-	 * <p>
-	 * This is the default.
-	 * Those subelements which can be uniquely paired between two documents using the key (tag+selected attributes)
-	 * will be merged, those that cannot be paired will be appended.<br/>
-	 * Example:<br/>
-	 * First:
-	 * <pre>
-	 * {@code
-	 *  <config>
-	 *     <service id="1">
-	 *         <parameter>parameter</parameter>
-	 *     </service>
-	 *  </config>
-	 * }
-	 * </pre>
-	 * Second:
-	 * <pre>
-	 * {@code
-	 *  <config>
-	 *     <service id="1"/>
-	 *         <parameter>other value</parameter>
-	 *     </service>
-	 *  </config>
-	 * }
-	 * </pre>
-	 * Result:
-	 * <pre>
-	 * {@code
-	 *  <config>
-	 *     <service id="1"/>
-	 *         <parameter>other value</parameter>
-	 *     </service>
-	 *  </config>
-	 * }
-	 * </pre>
-	 * </p>
-	 */
-	MERGE,
+    /**
+     * Merge subelements from both elements.
+     *
+     * <p>
+     * This is the default. Those subelements which can be uniquely paired
+     * between two documents using the key (tag+selected attributes) will be
+     * merged, those that cannot be paired will be appended.<br/>
+     * Example:<br/>
+     * First:
+     * <pre>
+     * {@code
+     *  <config>
+     *     <service id="1">
+     *         <parameter>parameter</parameter>
+     *     </service>
+     *  </config>
+     * }
+     * </pre> Second:
+     * <pre>
+     * {@code
+     *  <config>
+     *     <service id="1"/>
+     *         <parameter>other value</parameter>
+     *     </service>
+     *  </config>
+     * }
+     * </pre> Result:
+     * <pre>
+     * {@code
+     *  <config>
+     *     <service id="1"/>
+     *         <parameter>other value</parameter>
+     *     </service>
+     *  </config>
+     * }
+     * </pre>
+     * </p>
+     */
+    MERGE,
+    /**
+     * Always append child elements from both recessive and dominant elements.
+     *
+     * <p>
+     * Example:<br/>
+     * First:
+     * <pre>
+     * {@code
+     * <config>
+     *     <service id="1" combine.children="append">
+     *         <parameter>parameter</parameter>
+     *     </service>
+     *  </config>
+     * }
+     * </pre> Second:
+     * <pre>
+     * {@code
+     * <config>
+     *     <service id="1">
+     *         <parameter>parameter</parameter>
+     *     </service>
+     *  </config>
+     * }
+     * </pre> Result:
+     * <pre>
+     * {@code
+     * <config>
+     *     <service id="1" combine.children="append">
+     *         <parameter>parameter</parameter>
+     *         <parameter>parameter</parameter>
+     *     </service>
+     *  </config>
+     * }
+     * </pre>
+     * </p>
+     */
+    APPEND;
 
-	/**
-	 * Always append child elements from both recessive and dominant elements.
-	 *
-	 * <p>
-	 * Example:<br/>
-	 * First:
-	 * <pre>
-	 * {@code
-	 * <config>
-	 *     <service id="1" combine.children="append">
-	 *         <parameter>parameter</parameter>
-	 *     </service>
-	 *  </config>
-	 * }
-	 * </pre>
-	 * Second:
-	 * <pre>
-	 * {@code
-	 * <config>
-	 *     <service id="1">
-	 *         <parameter>parameter</parameter>
-	 *     </service>
-	 *  </config>
-	 * }
-	 * </pre>
-	 * Result:
-	 * <pre>
-	 * {@code
-	 * <config>
-	 *     <service id="1" combine.children="append">
-	 *         <parameter>parameter</parameter>
-	 *         <parameter>parameter</parameter>
-	 *     </service>
-	 *  </config>
-	 * }
-	 * </pre>
-	 * </p>
-	 */
-	APPEND;
-
-	public static final String ATTRIBUTE_NAME = "combine.children";
+    public static final String ATTRIBUTE_NAME = "combine.children";
 }

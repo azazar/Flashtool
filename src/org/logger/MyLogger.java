@@ -20,25 +20,26 @@ import org.apache.logging.log4j.core.layout.PatternLayout;
 
 public class MyLogger {
 
-	//public static String curlevel;
-	static String lastaction = "";
-	static String logdest ="";
-	static Properties proplog=null;
-	static final Logger logger = LogManager.getLogger(MyLogger.class);
-	public static final int CONSOLE_MODE=1;
-	public static final int GUI_MODE=2;
-	
-	public static String writeFile() {
-		String fname = MyLogger.getTimeStamp();
-		StringBuilderAppender.writeFile(fname);
-		return fname;
-	}
-	
-	public static void setMode(int mode) {
-		System.setProperty("enableConsole",(mode==CONSOLE_MODE)?"true":"false");
-		System.setProperty("enableGUI",(mode==GUI_MODE)?"true":"false");
-	}
-/*	public static void initProperties() {
+    //public static String curlevel;
+    static String lastaction = "";
+    static String logdest = "";
+    static Properties proplog = null;
+    static final Logger logger = LogManager.getLogger(MyLogger.class);
+    public static final int CONSOLE_MODE = 1;
+    public static final int GUI_MODE = 2;
+
+    public static String writeFile() {
+        String fname = MyLogger.getTimeStamp();
+        StringBuilderAppender.writeFile(fname);
+        return fname;
+    }
+
+    public static void setMode(int mode) {
+        System.setProperty("enableConsole", (mode == CONSOLE_MODE) ? "true" : "false");
+        System.setProperty("enableGUI", (mode == GUI_MODE) ? "true" : "false");
+    }
+
+    /*	public static void initProperties() {
 				
 		LoggerContext context= (LoggerContext) LogManager.getContext();
         Configuration config= context.getConfiguration();
@@ -54,46 +55,53 @@ public class MyLogger {
         config.addLogger(LogManager.ROOT_LOGGER_NAME, loggerConfig);
         context.updateLoggers();
 	}*/
+    public static void setLevel(String level) {
+        if (level.toLowerCase().equals("warn")) {
+            setLevel(Level.WARN);
+        }
+        if (level.toLowerCase().equals("error")) {
+            setLevel(Level.ERROR);
+        }
+        if (level.toLowerCase().equals("debug")) {
+            setLevel(Level.DEBUG);
+        }
+        if (level.toLowerCase().equals("info")) {
+            setLevel(Level.INFO);
+        }
+    }
 
-	public static void setLevel(String level) {
-		if (level.toLowerCase().equals("warn")) setLevel(Level.WARN);
-		if (level.toLowerCase().equals("error")) setLevel(Level.ERROR);
-		if (level.toLowerCase().equals("debug")) setLevel(Level.DEBUG);
-		if (level.toLowerCase().equals("info")) setLevel(Level.INFO);
-	}
+    public static Level getLevel() {
+        return LogManager.getRootLogger().getLevel();
+    }
 
-	public static Level getLevel() {
-		return LogManager.getRootLogger().getLevel();
-	}
-	
-	public static void setLevel(Level level) {
-		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-		Configuration config = ctx.getConfiguration();
-		LoggerConfig loggerConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME); 
-		loggerConfig.setLevel(level);
-		ctx.updateLoggers();
-			if (level == Level.ERROR) {
-				logger.error("<- This level is successfully initialized");
-			}
-			if (level == Level.WARN) {
-				logger.warn("<- This level is successfully initialized");
-			}
-			if (level == Level.DEBUG) {
-				logger.debug("<- This level is successfully initialized");
-			}
-			if (level == Level.INFO) {
-				logger.info("<- This level is successfully initialized");
-			}
-	}
+    public static void setLevel(Level level) {
+        LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+        Configuration config = ctx.getConfiguration();
+        LoggerConfig loggerConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
+        loggerConfig.setLevel(level);
+        ctx.updateLoggers();
+        if (level == Level.ERROR) {
+            logger.error("<- This level is successfully initialized");
+        }
+        if (level == Level.WARN) {
+            logger.warn("<- This level is successfully initialized");
+        }
+        if (level == Level.DEBUG) {
+            logger.debug("<- This level is successfully initialized");
+        }
+        if (level == Level.INFO) {
+            logger.info("<- This level is successfully initialized");
+        }
+    }
 
     public static String getTimeStamp() {
-    	DateFormat df = new SimpleDateFormat("yyyy-MM-dd");  
-    	df.setTimeZone( TimeZone.getTimeZone("PST"));  
-    	String date = ( df.format(new Date()));    
-    	DateFormat df1 = new SimpleDateFormat("hh-mm-ss") ;    
-    	df1.setTimeZone( TimeZone.getDefault()) ;  
-    	String time = ( df1.format(new Date()));
-    	return date+"_"+time;
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        df.setTimeZone(TimeZone.getTimeZone("PST"));
+        String date = (df.format(new Date()));
+        DateFormat df1 = new SimpleDateFormat("hh-mm-ss");
+        df1.setTimeZone(TimeZone.getDefault());
+        String time = (df1.format(new Date()));
+        return date + "_" + time;
     }
 
 }

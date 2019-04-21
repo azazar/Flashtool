@@ -5,34 +5,36 @@ import java.util.Vector;
 
 public class UsbDevList {
 
-	Vector<UsbDevice> list = new Vector<UsbDevice>();
-	
-	public void addDevice(UsbDevice d) {
-		try {
-			d.setConfiguration();
-			d.ref();
-			list.add(d);
-		} catch (Exception e) {};
-	}
+    Vector<UsbDevice> list = new Vector<UsbDevice>();
 
-	public Iterator<UsbDevice> getDevices() {
-		return list.iterator();
-	}
+    public void addDevice(UsbDevice d) {
+        try {
+            d.setConfiguration();
+            d.ref();
+            list.add(d);
+        }
+        catch (Exception e) {
+        };
+    }
 
-	public void destroyDevices() {
-		Iterator<UsbDevice> i = getDevices();
-		while (i.hasNext()) {
-			i.next().destroy();
-		}
-		list.clear();
-	}
+    public Iterator<UsbDevice> getDevices() {
+        return list.iterator();
+    }
 
-	public int size() {
-		return list.size();
-	}
+    public void destroyDevices() {
+        Iterator<UsbDevice> i = getDevices();
+        while (i.hasNext()) {
+            i.next().destroy();
+        }
+        list.clear();
+    }
 
-	public UsbDevice get(int index) {
-		return list.get(index);
-	}
+    public int size() {
+        return list.size();
+    }
+
+    public UsbDevice get(int index) {
+        return list.get(index);
+    }
 
 }

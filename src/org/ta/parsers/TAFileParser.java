@@ -1,6 +1,5 @@
 package org.ta.parsers;
 
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class TAFileParser {
+
     private static final Pattern COMMENT_LINE_PATTERN = Pattern.compile("^//.*");
     private static final Pattern BLANK_LINE_PATTERN = Pattern.compile("^[\\s]*$");
     private static final Pattern PARTITION_LINE_PATTERN = Pattern.compile("^\\p{XDigit}{2}$");
@@ -31,22 +31,21 @@ public class TAFileParser {
     private Vector<TAUnit> units = new Vector<TAUnit>();
     private File tafile;
 
-    public TAFileParser(File taf)  throws TAFileParseException, IOException {
-    	tafile=taf;
-    	FileInputStream inputStream = new FileInputStream(taf);
-    	this.parse(inputStream);
-        inputStream.close();
-    }
-
-    public String getName() {
-    	return tafile.getName();
-    }
-    
-    public TAFileParser(InputStream inputStream) throws TAFileParseException, IOException {
+    public TAFileParser(File taf) throws TAFileParseException, IOException {
+        tafile = taf;
+        FileInputStream inputStream = new FileInputStream(taf);
         this.parse(inputStream);
         inputStream.close();
     }
 
+    public String getName() {
+        return tafile.getName();
+    }
+
+    public TAFileParser(InputStream inputStream) throws TAFileParseException, IOException {
+        this.parse(inputStream);
+        inputStream.close();
+    }
 
     public void parse(InputStream inputStream) throws TAFileParseException, IOException {
         this.aReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -54,26 +53,24 @@ public class TAFileParser {
         this.aFoundPartition = false;
         this.aContinuationData = false;
         this.parsePartition();
-        while (getNextUnit()>0) {
-        	getUnitData();
-        	TAUnit unit = new TAUnit((int)this.aUnit,this.aUnitDataArray);
-        	units.addElement(unit);
+        while (getNextUnit() > 0) {
+            getUnitData();
+            TAUnit unit = new TAUnit((int) this.aUnit, this.aUnitDataArray);
+            units.addElement(unit);
         }
     }
 
     public Vector<TAUnit> entries() {
-    	return units;
+        return units;
     }
 
     public int getPartition() {
         return this.aPartition;
     }
 
-
     public boolean overridePartition() {
         return false;
     }
-
 
     public long getNextUnit() throws TAFileParseException, IOException {
         this.aUnitDataArray = null;
@@ -86,7 +83,9 @@ public class TAFileParser {
             if (this.matchDataLine(string)) {
                 return this.aUnit;
             }
-            if (this.matchComment(string) || this.matchBlankLine(string)) continue;
+            if (this.matchComment(string) || this.matchBlankLine(string)) {
+                continue;
+            }
             throw new TAFileParseException("Expected unit data line, at line:[" + string + "].");
         }
         return -1;
@@ -99,7 +98,9 @@ public class TAFileParser {
             if (string == null) {
                 throw new TAFileParseException("Expected more data for unit:[" + this.aUnit + "].");
             }
-            if (this.matchContinuationDataLine(string)) continue;
+            if (this.matchContinuationDataLine(string)) {
+                continue;
+            }
             throw new TAFileParseException("Expected more data for unit:[" + this.aUnit + "] at line:[" + string + "].");
         }
         return this.aUnitDataArray;
@@ -114,19 +115,21 @@ public class TAFileParser {
             if (this.matchPartition(string)) {
                 return this.aPartition;
             }
-            if (this.matchComment(string) || this.matchBlankLine(string)) continue;
+            if (this.matchComment(string) || this.matchBlankLine(string)) {
+                continue;
+            }
             throw new TAFileParseException("Expected partition at line:[" + string + "].");
         }
         throw new TAFileParseException("No partition found in data.");
     }
 
     private boolean matchComment(String string) {
-        Matcher matcher = COMMENT_LINE_PATTERN.matcher((CharSequence)string);
+        Matcher matcher = COMMENT_LINE_PATTERN.matcher((CharSequence) string);
         return matcher.matches();
     }
 
     private boolean matchPartition(String string) throws TAFileParseException {
-        Matcher matcher = PARTITION_LINE_PATTERN.matcher((CharSequence)string);
+        Matcher matcher = PARTITION_LINE_PATTERN.matcher((CharSequence) string);
         if (matcher.matches()) {
             if (this.aFoundPartition) {
                 throw new TAFileParseException("Parse exception: Duplicate partitions in data.");
@@ -143,7 +146,7 @@ public class TAFileParser {
     }
 
     private boolean matchDataLine(String string) throws TAFileParseException {
-        Matcher matcher = DATA_LINE_PATTERN.matcher((CharSequence)string);
+        Matcher matcher = DATA_LINE_PATTERN.matcher((CharSequence) string);
         if (matcher.matches()) {
             if (!this.aFoundPartition) {
                 throw new TAFileParseException("Parse exception: Expected partition.");
@@ -179,7 +182,7 @@ public class TAFileParser {
         if (!this.aFoundPartition) {
             throw new TAFileParseException("Parse exception: Expected partition.");
         }
-        Matcher matcher = CONTINUATION_DATA_LINE_PATTERN.matcher((CharSequence)string);
+        Matcher matcher = CONTINUATION_DATA_LINE_PATTERN.matcher((CharSequence) string);
         if (matcher.matches()) {
             String string2 = matcher.group(1);
             String[] arrstring = string2.trim().split("(?: |\\t)+");
@@ -187,11 +190,11 @@ public class TAFileParser {
             for (int i = 0; i < arrstring.length; ++i) {
                 this.aContinuationUnitDataList.add(arrstring[i]);
             }
-            if (l < (long)this.aUnitSize) {
+            if (l < (long) this.aUnitSize) {
                 this.aContinuationData = true;
                 return true;
             }
-            if (l > (long)this.aUnitSize) {
+            if (l > (long) this.aUnitSize) {
                 throw new TAFileParseException("Parse exception: Too much data for unit [" + this.aUnit + "] : " + l);
             }
             this.aUnitDataArray = this.asBytes(this.aContinuationUnitDataList);
@@ -202,14 +205,14 @@ public class TAFileParser {
     }
 
     private boolean matchBlankLine(String string) {
-        Matcher matcher = BLANK_LINE_PATTERN.matcher((CharSequence)string);
+        Matcher matcher = BLANK_LINE_PATTERN.matcher((CharSequence) string);
         return matcher.matches();
     }
 
     private byte[] asBytes(String[] arrstring) {
         byte[] arrby = new byte[arrstring.length];
         for (int i = 0; i < arrstring.length; ++i) {
-            arrby[i] = (byte)Integer.parseInt(arrstring[i], 16);
+            arrby[i] = (byte) Integer.parseInt(arrstring[i], 16);
         }
         return arrby;
     }
@@ -219,9 +222,8 @@ public class TAFileParser {
         int n = 0;
         Iterator<String> iterator = collection.iterator();
         while (iterator.hasNext()) {
-            arrby[n++] = (byte)Integer.parseInt(iterator.next(), 16);
+            arrby[n++] = (byte) Integer.parseInt(iterator.next(), 16);
         }
         return arrby;
     }
 }
-

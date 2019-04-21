@@ -12,37 +12,36 @@ import org.system.DeviceChangedListener;
 
 import flashsystem.Flasher;
 
-
 public class BackupTAJob extends Job {
 
-	Flasher flash = null;
-	boolean canceled = false;
-	static final Logger logger = LogManager.getLogger(BackupTAJob.class);
+    Flasher flash = null;
+    boolean canceled = false;
+    static final Logger logger = LogManager.getLogger(BackupTAJob.class);
 
-	public BackupTAJob(String name) {
-		super(name);
-	}
-	
-	public void setFlash(Flasher f) {
-		flash=f;
-	}
-	
+    public BackupTAJob(String name) {
+        super(name);
+    }
+
+    public void setFlash(Flasher f) {
+        flash = f;
+    }
+
     protected IStatus run(IProgressMonitor monitor) {
-    	try {
-			flash.open();
-			flash.sendLoader();
-			flash.backupTA();
-			flash.close();
-			logger.info("Dumping TA finished.");
-			LogProgress.initProgress(0);
-			DeviceChangedListener.enableDetection();
-			return Status.OK_STATUS;
-    	}
-    	catch (Exception e) {
-    		e.printStackTrace();
-    		LogProgress.initProgress(0);
-    		DeviceChangedListener.enableDetection();
-    		return Status.CANCEL_STATUS;
-    	}
+        try {
+            flash.open();
+            flash.sendLoader();
+            flash.backupTA();
+            flash.close();
+            logger.info("Dumping TA finished.");
+            LogProgress.initProgress(0);
+            DeviceChangedListener.enableDetection();
+            return Status.OK_STATUS;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            LogProgress.initProgress(0);
+            DeviceChangedListener.enableDetection();
+            return Status.CANCEL_STATUS;
+        }
     }
 }

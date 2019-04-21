@@ -6,136 +6,147 @@ import org.sinfile.parsers.SinFile;
 import org.sinfile.parsers.SinFileException;
 
 public class Category implements Comparable<Category> {
-		  
-	private String id;
-	private List<BundleEntry> entries = new ArrayList<BundleEntry>();
-	private boolean enabled = false;
-	private boolean issin = false;
-	private boolean ista = false;
-	private boolean isbootdelivery = false;
-	private boolean ispartitiondelivery = false;
-	private boolean ispartition = false;
-	private boolean issecro = false;
-	private boolean ispreload = false;
-	private boolean iselabel = false;
-	private boolean issystemuser = false;
-	private boolean issw = false;
 
-		  public String getId() {
-		    return id;
-		  }
+    private String id;
+    private List<BundleEntry> entries = new ArrayList<BundleEntry>();
+    private boolean enabled = false;
+    private boolean issin = false;
+    private boolean ista = false;
+    private boolean isbootdelivery = false;
+    private boolean ispartitiondelivery = false;
+    private boolean ispartition = false;
+    private boolean issecro = false;
+    private boolean ispreload = false;
+    private boolean iselabel = false;
+    private boolean issystemuser = false;
+    private boolean issw = false;
 
-		  public void setId(String id) {
-		    this.id = id;
-		  }
+    public String getId() {
+        return id;
+    }
 
-		  public List<BundleEntry> getEntries() {
-		    return entries;
-		  }
-		  
-		  public void addEntry(BundleEntry f) throws SinFileException {
-			  entries.add(f);
-			  if (f.getName().endsWith(".sin")) issin=true;
-			  if (f.getName().endsWith(".ta")) ista=true;
-			  if (f.getName().contains("boot_delivery")) isbootdelivery = true;
-			  if (f.getName().contains("partition_delivery")) ispartitiondelivery = true;
-			  if (issin) {
-				  if (f.getName().toUpperCase().contains("PARTITION")) {
-						ispartition = true;
-				  }
-				  else if (f.getName().toUpperCase().contains("SECRO")) {
-						issecro = true;
-				  }
-				  else if (f.getName().toUpperCase().contains("PRELOAD")) {
-					  	ispreload = true;
-				  }
-				  else if (f.getName().toUpperCase().contains("ELABEL")) {
-						iselabel = true;
-				  }
-				  else if (f.getName().toUpperCase().contains("SYSTEM") || f.getName().toUpperCase().contains("USER") || f.getName().toUpperCase().contains("OEM") || f.getName().toUpperCase().contains("VENDOR") || f.getName().toUpperCase().contains("B2B") || f.getName().toUpperCase().contains("SSD")) {
-						issystemuser = true;
-				  }
-				  else
-					  issw = true;
-			  }
-		  }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-		  public boolean isPartition() {
-			  return ispartition;
-		  }
+    public List<BundleEntry> getEntries() {
+        return entries;
+    }
 
-		  public boolean isSecro() {
-			  return issecro;
-		  }
+    public void addEntry(BundleEntry f) throws SinFileException {
+        entries.add(f);
+        if (f.getName().endsWith(".sin")) {
+            issin = true;
+        }
+        if (f.getName().endsWith(".ta")) {
+            ista = true;
+        }
+        if (f.getName().contains("boot_delivery")) {
+            isbootdelivery = true;
+        }
+        if (f.getName().contains("partition_delivery")) {
+            ispartitiondelivery = true;
+        }
+        if (issin) {
+            if (f.getName().toUpperCase().contains("PARTITION")) {
+                ispartition = true;
+            }
+            else if (f.getName().toUpperCase().contains("SECRO")) {
+                issecro = true;
+            }
+            else if (f.getName().toUpperCase().contains("PRELOAD")) {
+                ispreload = true;
+            }
+            else if (f.getName().toUpperCase().contains("ELABEL")) {
+                iselabel = true;
+            }
+            else if (f.getName().toUpperCase().contains("SYSTEM") || f.getName().toUpperCase().contains("USER") || f.getName().toUpperCase().contains("OEM") || f.getName().toUpperCase().contains("VENDOR") || f.getName().toUpperCase().contains("B2B") || f.getName().toUpperCase().contains("SSD")) {
+                issystemuser = true;
+            }
+            else {
+                issw = true;
+            }
+        }
+    }
 
-		  public boolean isPreload() {
-			  return ispreload;
-		  }
+    public boolean isPartition() {
+        return ispartition;
+    }
 
-		  public boolean isElabel() {
-			  return iselabel;
-		  }
+    public boolean isSecro() {
+        return issecro;
+    }
 
-		  public boolean isSystem() {
-			  return issystemuser;
-		  }
+    public boolean isPreload() {
+        return ispreload;
+    }
 
-		  public boolean isSoftware() {
-			  return issw;
-		  }
+    public boolean isElabel() {
+        return iselabel;
+    }
 
-		  public String toString() {
-			  return id;
-		  }
+    public boolean isSystem() {
+        return issystemuser;
+    }
 
-		  public boolean isTa() {
-			  return ista;
-		  }
-		  
-		  public boolean isSin() {
-			  return issin;
-		  }
+    public boolean isSoftware() {
+        return issw;
+    }
 
-		  public boolean isBootDelivery() {
-			  return isbootdelivery;
-		  }
+    public String toString() {
+        return id;
+    }
 
-		  public boolean isPartitionDelivery() {
-			  return ispartitiondelivery;
-		  }
-		  
-		  public boolean equals(Category c) {
-			  return c.getId().equals(id);
-		  }
-		  
-		  @Override
-		  public int hashCode() { 
-			  return id.hashCode();
-		  }
-		  
-		  public boolean isEnabled() {
-			  return enabled;
-		  }
-		  
-		  @Override
-		  public boolean equals(Object o) {
-			  if (o instanceof String)
-				  return id.equals((String)o);
-			  if (o instanceof Category)
-				  return ((Category)o).getId().equals(id);
-			  return false;
-		  }
+    public boolean isTa() {
+        return ista;
+    }
 
-		@Override
-		public int compareTo(Category o) {
-			return this.id.compareTo(o.getId());
-		}
-		
-		public void setEnabled(boolean enabled) {
-			this.enabled=enabled;
-		}
-		
-		public static String getCategoryFromName(String name) {
-			return SinFile.getShortName(name).toUpperCase();
-		}
+    public boolean isSin() {
+        return issin;
+    }
+
+    public boolean isBootDelivery() {
+        return isbootdelivery;
+    }
+
+    public boolean isPartitionDelivery() {
+        return ispartitiondelivery;
+    }
+
+    public boolean equals(Category c) {
+        return c.getId().equals(id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof String) {
+            return id.equals((String) o);
+        }
+        if (o instanceof Category) {
+            return ((Category) o).getId().equals(id);
+        }
+        return false;
+    }
+
+    @Override
+    public int compareTo(Category o) {
+        return this.id.compareTo(o.getId());
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public static String getCategoryFromName(String name) {
+        return SinFile.getShortName(name).toUpperCase();
+    }
 }

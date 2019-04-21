@@ -12,25 +12,25 @@ import org.util.XperiFirm;
 
 public class XperiFirmJob extends Job {
 
-	static final Logger logger = LogManager.getLogger(DecryptJob.class);
-	Shell _parent;
-	
-	public XperiFirmJob(String name) {
-		super(name);
-	}
-	
-	public void setShell(Shell s) {
-		_parent = s;
-	}
-		
+    static final Logger logger = LogManager.getLogger(DecryptJob.class);
+    Shell _parent;
+
+    public XperiFirmJob(String name) {
+        super(name);
+    }
+
+    public void setShell(Shell s) {
+        _parent = s;
+    }
+
     protected IStatus run(IProgressMonitor monitor) {
-    	try {
-    		XperiFirm.run(_parent);
-			return Status.OK_STATUS;
-    	}
-    	catch (Exception e) {
-    		e.printStackTrace();
-    		return Status.CANCEL_STATUS;
-    	}
+        try {
+            XperiFirm.run(_parent);
+            return Status.OK_STATUS;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return Status.CANCEL_STATUS;
+        }
     }
 }

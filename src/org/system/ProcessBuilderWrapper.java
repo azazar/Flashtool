@@ -12,7 +12,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 public class ProcessBuilderWrapper {
 
     private StringWriter infos;
@@ -22,15 +21,16 @@ public class ProcessBuilderWrapper {
     static final Logger logger = LogManager.getLogger(ProcessBuilderWrapper.class);
 
     public ProcessBuilderWrapper(File directory, List<String> command) throws Exception {
-    	run(directory, command);
+        run(directory, command);
     }
 
     public void run(File directory, List<String> command) throws Exception {
-    	infos = new StringWriter();
+        infos = new StringWriter();
         errors = new StringWriter();
-        ProcessBuilder pb = new ProcessBuilder(command);     
-        if(directory != null)
+        ProcessBuilder pb = new ProcessBuilder(command);
+        if (directory != null) {
             pb.directory(directory);
+        }
         Process process = pb.start();
         StreamBoozer seInfo = new StreamBoozer(process.getInputStream(), new PrintWriter(infos, true));
         StreamBoozer seError = new StreamBoozer(process.getErrorStream(), new PrintWriter(errors, true));
@@ -40,31 +40,31 @@ public class ProcessBuilderWrapper {
         seInfo.join();
         seError.join();
     }
-    
+
     public ProcessBuilderWrapper(List<String> command) throws Exception {
-    	run(null, command);
+        run(null, command);
     }
 
     public ProcessBuilderWrapper(String[] command, boolean print) throws Exception {
-    	this.print = print;
-    	List<String> cmd = new ArrayList<String>();
-		for (int i=0;i<command.length;i++)
-			cmd.add(command[i]);
-		run(null, cmd);
+        this.print = print;
+        List<String> cmd = new ArrayList<String>();
+        for (int i = 0; i < command.length; i++) {
+            cmd.add(command[i]);
+        }
+        run(null, cmd);
     }
 
     public String getStdErr() {
         return errors.toString();
     }
 
-
     public String getStdOut() {
         return infos.toString();
     }
 
     public RunOutputs getOutputs() {
-		return new RunOutputs(infos.toString(), errors.toString());
-	}
+        return new RunOutputs(infos.toString(), errors.toString());
+    }
 
     public int getStatus() {
         return status;
@@ -86,28 +86,33 @@ public class ProcessBuilderWrapper {
             try {
                 br = new BufferedReader(new InputStreamReader(in));
                 String line = null;
-                while ( (line = br.readLine()) != null) {
-                	if (line.trim().replaceAll("\n", "").length()>0) {
-                		line = line.replaceAll("\n", "");
-	                	if (print)
-	                		logger.info(line);
-	                	else
-	                		logger.debug(line);
-	                    pw.println(line);
-                	}
+                while ((line = br.readLine()) != null) {
+                    if (line.trim().replaceAll("\n", "").length() > 0) {
+                        line = line.replaceAll("\n", "");
+                        if (print) {
+                            logger.info(line);
+                        }
+                        else {
+                            logger.debug(line);
+                        }
+                        pw.println(line);
+                    }
                 }
             }
-            catch (Exception e) {}
+            catch (Exception e) {
+            }
             finally {
                 try {
                     br.close();
-                } catch (IOException e) {}
+                }
+                catch (IOException e) {
+                }
             }
         }
 
     }
 
     public void kill() {
-    	
+
     }
 }

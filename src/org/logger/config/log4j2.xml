@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="ERROR" packages="org.logger">
     <Appenders>
-		<ConsoleAppender name="CONSOLELogger">
-			<PatternLayout>
+        <ConsoleAppender name="CONSOLELogger">
+            <PatternLayout>
                 <ScriptPatternSelector defaultPattern="%d{dd/mmm/yyyy HH:mm:ss} - %-5p - %m%n">
                     <Script name="selector" language="groovy"><![CDATA[
                     	return org.apache.logging.log4j.LogManager.getRootLogger().getLevel().toString();]]>
@@ -11,8 +11,8 @@
                 </ScriptPatternSelector>
             </PatternLayout>
         </ConsoleAppender>
-		<TextAreaAppender name="GUILogger">
-			<PatternLayout>
+        <TextAreaAppender name="GUILogger">
+            <PatternLayout>
                 <ScriptPatternSelector defaultPattern="%d{dd/mmm/yyyy HH:mm:ss} - %-5p - %m%n">
                     <Script name="selector" language="groovy"><![CDATA[
                     	return org.apache.logging.log4j.LogManager.getRootLogger().getLevel().toString();]]>
@@ -22,27 +22,27 @@
                 </ScriptPatternSelector>
             </PatternLayout>
         </TextAreaAppender>
-		<StringBuilderAppender name="StringLogger">
+        <StringBuilderAppender name="StringLogger">
             <PatternLayout pattern="%d{dd/mmm/yyyy HH:mm:ss} - %-5p - %m%n"/>
         </StringBuilderAppender>
     </Appenders>
     <Loggers>
         <Root level="INFO">
             <AppenderRef ref="GUILogger">
-            	<ScriptFilter onMatch="ACCEPT" onMisMatch="DENY">
-						<Script language="groovy"><![CDATA[
+                <ScriptFilter onMatch="ACCEPT" onMisMatch="DENY">
+                    <Script language="groovy"><![CDATA[
          					return System.getProperty("enableGUI", "false").equalsIgnoreCase("true");
       					]]></Script>
-      			</ScriptFilter>
+                </ScriptFilter>
             </AppenderRef>
             <AppenderRef ref="CONSOLELogger">
-                    <ScriptFilter onMatch="ACCEPT" onMisMatch="DENY">
-						<Script language="groovy"><![CDATA[
+                <ScriptFilter onMatch="ACCEPT" onMisMatch="DENY">
+                    <Script language="groovy"><![CDATA[
          					return System.getProperty("enableConsole", "false").equalsIgnoreCase("true");
       					]]></Script>
-    			</ScriptFilter>
+                </ScriptFilter>
             </AppenderRef>
-            	<AppenderRef ref="StringLogger">
+            <AppenderRef ref="StringLogger">
             </AppenderRef>
         </Root>
     </Loggers>

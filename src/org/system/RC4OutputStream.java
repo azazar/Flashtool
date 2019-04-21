@@ -14,9 +14,9 @@ import com.google.common.io.BaseEncoding;
 
 public class RC4OutputStream extends OutputStream {
 
-	private CipherOutputStream localCipherOutputStream;
-	
-	public RC4OutputStream(OutputStream out) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException {
+    private CipherOutputStream localCipherOutputStream;
+
+    public RC4OutputStream(OutputStream out) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException {
         if (Security.getProvider("BC") == null) {
             Security.addProvider(new BouncyCastleProvider());
         }
@@ -24,21 +24,21 @@ public class RC4OutputStream extends OutputStream {
         Cipher cipher = Cipher.getInstance("RC4");
         cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
         localCipherOutputStream = new CipherOutputStream(out, cipher);
-	}
+    }
 
-	@Override
-	public void write(int b) throws IOException {
-		localCipherOutputStream.write(b);
-	}
+    @Override
+    public void write(int b) throws IOException {
+        localCipherOutputStream.write(b);
+    }
 
-	@Override
-	public void flush() throws IOException {
-		localCipherOutputStream.flush();
-	}
+    @Override
+    public void flush() throws IOException {
+        localCipherOutputStream.flush();
+    }
 
-	@Override
-	public void close() throws IOException {
-		localCipherOutputStream.close();
-	}
+    @Override
+    public void close() throws IOException {
+        localCipherOutputStream.close();
+    }
 
 }

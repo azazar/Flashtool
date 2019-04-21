@@ -25,107 +25,111 @@ import org.eclipse.jface.viewers.Viewer;
 
 public class VariantSelector extends Dialog {
 
-	protected Object result;
-	protected Shell shlVariantSelector;
-	private Button btnCancel;
-	HashSet<String> currentVariant;
-	private List listVariant;
+    protected Object result;
+    protected Shell shlVariantSelector;
+    private Button btnCancel;
+    HashSet<String> currentVariant;
+    private List listVariant;
 
-	/**
-	 * Create the dialog.
-	 * @param parent
-	 * @param style
-	 */
-	public VariantSelector(Shell parent, int style) {
-		super(parent, style);
-		setText("Variant Selector");
-	}
+    /**
+     * Create the dialog.
+     *
+     * @param parent
+     * @param style
+     */
+    public VariantSelector(Shell parent, int style) {
+        super(parent, style);
+        setText("Variant Selector");
+    }
 
-	/**
-	 * Open the dialog.
-	 * @return the result
-	 */
-	public Object open(HashSet<String> variantlist) {
-		if (variantlist.size()==0) return null;
-		currentVariant = variantlist;
-		createContents();
-		shlVariantSelector.open();
-		shlVariantSelector.layout();
-		Display display = getParent().getDisplay();
-		while (!shlVariantSelector.isDisposed()) {
-			if (!display.readAndDispatch()) {
-				display.sleep();
-			}
-		}
-		return result;
-	}
+    /**
+     * Open the dialog.
+     *
+     * @return the result
+     */
+    public Object open(HashSet<String> variantlist) {
+        if (variantlist.size() == 0) {
+            return null;
+        }
+        currentVariant = variantlist;
+        createContents();
+        shlVariantSelector.open();
+        shlVariantSelector.layout();
+        Display display = getParent().getDisplay();
+        while (!shlVariantSelector.isDisposed()) {
+            if (!display.readAndDispatch()) {
+                display.sleep();
+            }
+        }
+        return result;
+    }
 
-	/**
-	 * Create contents of the dialog.
-	 */
-	private void createContents() {
-		shlVariantSelector = new Shell(getParent(), getStyle());
-		shlVariantSelector.setSize(261, 318);
-		shlVariantSelector.setText("Variant Selector");
-		shlVariantSelector.setLayout(new FormLayout());
-		
-		btnCancel = new Button(shlVariantSelector, SWT.NONE);
-		FormData fd_btnCancel = new FormData();
-		fd_btnCancel.right = new FormAttachment(100, -10);
-		btnCancel.setLayoutData(fd_btnCancel);
-		btnCancel.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				result = null;
-				shlVariantSelector.dispose();
-			}
-		});
-		btnCancel.setText("Cancel");
-		ListViewer listVariantViewer = new ListViewer(shlVariantSelector, SWT.BORDER | SWT.V_SCROLL);
-		listVariant = listVariantViewer.getList();
-		fd_btnCancel.bottom = new FormAttachment(100, -10);
-		FormData fd_listVariant = new FormData();
-		fd_listVariant.top = new FormAttachment(0, 10);
-		fd_listVariant.right = new FormAttachment(100, -10);
-		fd_listVariant.left = new FormAttachment(0, 10);
-		fd_listVariant.bottom = new FormAttachment(btnCancel, -6);
-		listVariant.setLayoutData(fd_listVariant);
-		listVariant.addListener(SWT.DefaultSelection, new Listener() {
-		      public void handleEvent(Event e) {
-		        int selected = listVariant.getSelectionIndex();
-		        String string = listVariant.getItem(selected);
-		        result = string;
-		        shlVariantSelector.dispose();
-		      }
-		    });
+    /**
+     * Create contents of the dialog.
+     */
+    private void createContents() {
+        shlVariantSelector = new Shell(getParent(), getStyle());
+        shlVariantSelector.setSize(261, 318);
+        shlVariantSelector.setText("Variant Selector");
+        shlVariantSelector.setLayout(new FormLayout());
 
-		listVariantViewer.setContentProvider(new IStructuredContentProvider() {
-	        public Object[] getElements(Object inputElement) {
-	          HashSet<String> s = (HashSet<String>)inputElement;
-	          return s.toArray();
-	        }
-	        
-	        public void dispose() {
-	        }
-	   
-	        public void inputChanged(
-	          Viewer viewer,
-	          Object oldInput,
-	          Object newInput) {
-	        }
-	    });
+        btnCancel = new Button(shlVariantSelector, SWT.NONE);
+        FormData fd_btnCancel = new FormData();
+        fd_btnCancel.right = new FormAttachment(100, -10);
+        btnCancel.setLayoutData(fd_btnCancel);
+        btnCancel.addSelectionListener(new SelectionAdapter() {
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                result = null;
+                shlVariantSelector.dispose();
+            }
+        });
+        btnCancel.setText("Cancel");
+        ListViewer listVariantViewer = new ListViewer(shlVariantSelector, SWT.BORDER | SWT.V_SCROLL);
+        listVariant = listVariantViewer.getList();
+        fd_btnCancel.bottom = new FormAttachment(100, -10);
+        FormData fd_listVariant = new FormData();
+        fd_listVariant.top = new FormAttachment(0, 10);
+        fd_listVariant.right = new FormAttachment(100, -10);
+        fd_listVariant.left = new FormAttachment(0, 10);
+        fd_listVariant.bottom = new FormAttachment(btnCancel, -6);
+        listVariant.setLayoutData(fd_listVariant);
+        listVariant.addListener(SWT.DefaultSelection, new Listener() {
+            public void handleEvent(Event e) {
+                int selected = listVariant.getSelectionIndex();
+                String string = listVariant.getItem(selected);
+                result = string;
+                shlVariantSelector.dispose();
+            }
+        });
 
-		listVariantViewer.setLabelProvider(new LabelProvider() {
-	        public Image getImage(Object element) {
-	          return null;
-	        }
-	   
-	        public String getText(Object element) {
-	          return (String)element;
-	        }
-		});
-		
-		listVariantViewer.setInput(currentVariant);
+        listVariantViewer.setContentProvider(new IStructuredContentProvider() {
+            public Object[] getElements(Object inputElement) {
+                HashSet<String> s = (HashSet<String>) inputElement;
+                return s.toArray();
+            }
 
-	}
+            public void dispose() {
+            }
+
+            public void inputChanged(
+                    Viewer viewer,
+                    Object oldInput,
+                    Object newInput) {
+            }
+        });
+
+        listVariantViewer.setLabelProvider(new LabelProvider() {
+            public Image getImage(Object element) {
+                return null;
+            }
+
+            public String getText(Object element) {
+                return (String) element;
+            }
+        });
+
+        listVariantViewer.setInput(currentVariant);
+
+    }
 }

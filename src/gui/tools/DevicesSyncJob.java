@@ -1,6 +1,5 @@
 package gui.tools;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,25 +11,25 @@ import org.system.DevicesGit;
 
 public class DevicesSyncJob extends Job {
 
-	boolean canceled = false;
-	
-	static final Logger logger = LogManager.getLogger(DevicesSyncJob.class);
+    boolean canceled = false;
 
-	public DevicesSyncJob(String name) {
-		super(name);
-	}
-	
+    static final Logger logger = LogManager.getLogger(DevicesSyncJob.class);
+
+    public DevicesSyncJob(String name) {
+        super(name);
+    }
+
     protected IStatus run(IProgressMonitor monitor) {
-		try {
-			logger.info("Syncing devices from github");
-			DevicesGit.gitSync();
-	    	logger.info("Devices sync finished.");
-			return Status.OK_STATUS;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			logger.error("Cannot sync devices : "+e.getMessage());
-			return Status.CANCEL_STATUS;
-		}
+        try {
+            logger.info("Syncing devices from github");
+            DevicesGit.gitSync();
+            logger.info("Devices sync finished.");
+            return Status.OK_STATUS;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            logger.error("Cannot sync devices : " + e.getMessage());
+            return Status.CANCEL_STATUS;
+        }
     }
 }
