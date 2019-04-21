@@ -33,10 +33,7 @@ import org.util.BytesUtil;
 import org.util.HexDump;
 import com.Ostermiller.util.CircularByteBuffer;
 import flashsystem.io.USBFlash;
-import gui.tools.WidgetTask;
-import gui.tools.XMLBootConfig;
-import gui.tools.XMLBootDelivery;
-import gui.tools.XMLPartitionDelivery;
+import gui.tools.*;
 
 public class CommandFlasher implements Flasher {
 
@@ -165,13 +162,20 @@ public class CommandFlasher implements Flasher {
     			logger.info("trying to continue anyway");
     		}
     	    logger.info("Phone ready for flashmode operations.");
-			if (_bundle.getDevice()!=null) {
-				if (_bundle.getDevice().length()>0 && !currentdevice.equals(_bundle.getDevice())) {
-						logger.error("The bundle does not match the connected device");
-						close();
-						found = false;
-				}
-				else found=true;
+    	    if (_bundle.getDevice()!=null) {
+                if (!currentdevice.equals(_bundle.getDevice())) {
+                    if (MsgBox.question("The bundle \"" + _bundle.getDevice() + "\" does not match the connected device \"" + currentdevice + "\". Flashing it is probably a bad idea. Continue?") == SWT.YES) {
+                        logger.warn("The bundle does not match the connected device");
+                        found = true;
+                    }
+                    else {
+                        logger.error("The bundle does not match the connected device");
+                        close();
+                        found = false;
+                    }
+                }
+                else 
+                    found = true;
 			}
 			else
 				found = true;

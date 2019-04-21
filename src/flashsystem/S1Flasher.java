@@ -1,15 +1,19 @@
 package flashsystem;
 
 import flashsystem.io.USBFlash;
+import gui.MainSWT;
 import gui.tools.WidgetTask;
 import gui.tools.XMLBootConfig;
 import gui.tools.XMLBootDelivery;
+
+import java.awt.Dialog;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.io.IOException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.bouncycastle.util.io.Streams;
@@ -28,7 +32,10 @@ import org.ta.parsers.TAFileParser;
 import org.ta.parsers.TAUnit;
 import org.util.BytesUtil;
 import org.util.HexDump;
+
 import com.google.common.primitives.Bytes;
+import gui.tools.*;
+
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
@@ -986,10 +993,21 @@ public class S1Flasher implements Flasher {
     	    logger.info("Phone ready for flashmode operations.");
 		    getDevInfo();
 			if (_bundle.getDevice()!=null) {
-				if (_bundle.getDevice().length()>0 && !currentdevice.equals(_bundle.getDevice())) {
-						logger.error("The bundle does not match the connected device");
-						close();
-						found = false;
+				if (_bundle.getDevice().length()>0) {
+				    if (!currentdevice.equals(_bundle.getDevice())) {
+                        logger.error("The bundle does not match the connected device");
+                        if (MsgBox.question("The bundle \"" + _bundle.getDevice() + "\" does not match the connected device \"" + currentdevice + "\". Flashing it is probably a bad idea. Continue?") == SWT.YES) {
+                            logger.warn("The bundle does not match the connected device");
+                            found = true;
+                        }
+                        else {
+                            logger.error("The bundle does not match the connected device");
+                            close();
+                            found = false;
+                        }
+				    }
+				    else 
+				        found = true;
 				}
 				else found=true;
 			}
