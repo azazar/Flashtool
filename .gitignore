@@ -5,3 +5,6 @@
 /bin
 /setup_new.nsi
 /.metadata
+/jre/linjre32
+/jre/linjre64
+/nbproject
